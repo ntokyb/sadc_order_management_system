@@ -1,0 +1,13 @@
+bin/
+obj/
+.vs/
+*.user
+*.suo
+.DS_Store
+migrations.sql
+
+frontend/node_modules/
+frontend/dist/
+
+.env
+appsettings.Development.local.json

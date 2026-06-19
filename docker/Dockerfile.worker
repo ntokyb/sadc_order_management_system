@@ -1,0 +1,10 @@
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+COPY src ./src
+RUN dotnet restore src/SadcOrders.Worker/SadcOrders.Worker.csproj
+RUN dotnet publish src/SadcOrders.Worker/SadcOrders.Worker.csproj -c Release -o /app/publish --no-restore
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+WORKDIR /app
+COPY --from=build /app/publish .
+ENTRYPOINT ["dotnet", "SadcOrders.Worker.dll"]
