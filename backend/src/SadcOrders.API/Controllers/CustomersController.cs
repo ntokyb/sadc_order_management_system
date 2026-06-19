@@ -54,9 +54,10 @@ public class CustomersController(IMediator mediator) : ControllerBase
         [FromQuery] string? search,
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = PaginationDefaults.DefaultPageSize,
+        [FromQuery] bool? hasOrders = null,
         CancellationToken ct = default)
     {
-        var result = await mediator.Send(new GetCustomersQuery(search, page, pageSize), ct);
+        var result = await mediator.Send(new GetCustomersQuery(search, page, pageSize, hasOrders), ct);
         return Ok(result);
     }
 
