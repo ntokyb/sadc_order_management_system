@@ -7,7 +7,7 @@ using SadcOrders.Application.Mapping;
 
 namespace SadcOrders.Application.Customers.Queries;
 
-public record GetCustomersQuery(string? Search, int Page, int PageSize) : IRequest<PagedResult<CustomerDto>>;
+public record GetCustomersQuery(string? Search, int Page, int PageSize, bool? HasOrders) : IRequest<PagedResult<CustomerDto>>;
 
 public class GetCustomersQueryHandler(IApplicationDbContext db) : IRequestHandler<GetCustomersQuery, PagedResult<CustomerDto>>
 {
@@ -22,6 +22,9 @@ public class GetCustomersQueryHandler(IApplicationDbContext db) : IRequestHandle
             var term = request.Search.Trim();
             query = query.Where(c => c.Name.Contains(term) || c.Email.Contains(term));
         }
+
+        if (request.HasOrders == true)
+            query = query.Where(c => c.Orders.Any());
 
         var total = await query.CountAsync(cancellationToken);
         var customers = await query
